@@ -17,8 +17,8 @@ const Game = () => {
 
     return (
         <div style={{
-            width: '100vw',
-            height: '100vh',
+            width: window.innerWidth,
+            height: window.innerHeight,
             margin: 0,
             padding: 0,
             overflow: 'hidden',
@@ -72,7 +72,6 @@ function initGame() {
                 this.scene.start('GameScene');
             });
 
-            // Optional: Add instructions
             this.add.text(centerX, centerY + 150, 'WASD to move\nMouse to aim and shoot', {
                 fontSize: '20px',
                 color: '#ffffff',
@@ -255,11 +254,11 @@ function initGame() {
         const graphics = this.add.graphics();
 
         const levelColors = {
-            1: 0x000066,  // Dark blue
-            2: 0x006600,  // Forest green
-            3: 0x660000,  // Deep red
-            4: 0x666600,  // Desert yellow
-            5: 0x660066   // Purple
+            1: 0x000066,
+            2: 0x006600,
+            3: 0x660000,
+            4: 0x666600,
+            5: 0x660066
         };
 
 
@@ -475,7 +474,7 @@ function initGame() {
         const newHealth = currentHealth - BULLET_DAMAGE;
         enemy.setData('health', newHealth);
 
-        console.log('Enemy hit! Health:', newHealth); // Debug line
+        console.log('Enemy hit! Health:', newHealth);
 
         this.tweens.add({
             targets: enemy,
@@ -541,7 +540,6 @@ function initGame() {
         }
     }
     function findPath(start, end, walls) {
-        // Simple A* like approach
         const direct = new Phaser.Geom.Line(start.x, start.y, end.x, end.y);
         let blocked = false;
         walls.children.iterate(wall => {
@@ -661,7 +659,7 @@ function initGame() {
                             this.physics.moveTo(enemy, retreatPoint.x, retreatPoint.y, ENEMY_SPEED);
                         }
                     } else if (distToPlayer > COMBAT_DISTANCE * 1.3) {
-                        // Too far, advance using pathfinding
+                        // Too far
                         const pathToPlayer = findPath(
                             {x: enemy.x, y: enemy.y},
                             {x: player.x, y: player.y},
@@ -671,7 +669,7 @@ function initGame() {
                             this.physics.moveTo(enemy, pathToPlayer.x, pathToPlayer.y, ENEMY_SPEED);
                         }
                     } else {
-                        // In good range, find and use cover while shooting
+                        // In good range
                         const coverPos = findCoverPosition(enemy, {x: player.x, y: player.y}, walls);
                         if (coverPos) {
                             const distToCover = Phaser.Math.Distance.Between(
@@ -684,7 +682,7 @@ function initGame() {
                         }
                     }
 
-                    // Shoot if we have line of sight
+                    // Shoot
                     if (hasLineOfSight) {
                         enemyShoot.call(this, enemy, player, time);
                     }
