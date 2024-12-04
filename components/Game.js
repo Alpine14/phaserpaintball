@@ -3,22 +3,35 @@
 import { useEffect } from 'react';
 
 const Game = () => {
+    const [windowSize, setWindowSize] = useState({
+        width: 0,
+        height: 0,
+    });
     useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        };
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js';
         script.async = true;
         script.onload = initGame;
         document.body.appendChild(script);
+        window.addEventListener('resize', handleResize);
+        handleResize()
 
         return () => {
+            window.removeEventListener('resize', handleResize);
             document.body.removeChild(script);
         };
     }, []);
 
     return (
         <div style={{
-            width: window.innerWidth,
-            height: window.innerHeight,
+            width: windowSize.width,
+            height: windowSize.height,
             margin: 0,
             padding: 0,
             overflow: 'hidden',
